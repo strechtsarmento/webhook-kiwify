@@ -33,27 +33,44 @@ console.log(JSON.stringify(data, null, 2));
 
     // SALVAR FIRESTORE
     await db.collection('chaves').doc(chave).set({
+function gerarChave() {
 
-      nome: data.Customer?.full_name || '',
-      email: data.Customer?.email || '',
-      produto: data.Product?.name || '',
-      status: 'ativo', || '',
-      criadoEm: new Date()
+  const caracteres =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    });
+  let resultado = '';
 
-    console.log('Dados salvos no Firestore');
-
-    res.status(200).send('OK');
-
-  } catch (error) {
-
-    console.error('ERRO FIREBASE:');
-    console.error(error);
-
-    res.status(500).send(error);
-
+  for (let i = 0; i < 16; i++) {
+    resultado += caracteres.charAt(
+      Math.floor(Math.random() * caracteres.length)
+    );
   }
+
+  return (
+    Math.floor(1000 + Math.random() * 9000) +
+    '-' +
+    resultado
+  );
+}
+
+const chave = gerarChave();
+
+await db.collection('chaves').doc(chave).set({
+
+  chave: chave,
+  nome: data.Customer?.full_name || '',
+  email: data.Customer?.email || '',
+  produto:
+    data.Product?.product_name ||
+    data.Product?.name ||
+    '',
+
+  status: 'ativo',
+
+  order_id: data.order_id || '',
+  subscription_id: data.subscription_id || '',
+
+  criadoEm: new Date()
 
 });
 
