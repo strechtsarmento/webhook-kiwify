@@ -6,9 +6,8 @@ const app = express();
 app.use(express.json());
 
 // IMPORTAR CHAVE FIREBASE
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG);
 
-// INICIAR FIREBASE
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
