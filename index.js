@@ -28,15 +28,16 @@ console.log('Webhook recebido');
 console.log(JSON.stringify(data, null, 2));
 
     // ID DA COMPRA
-    const orderId = data.order_id || Date.now().toString();
+    const chave = Math.floor(1000 + Math.random() * 9000) + '-' +
+    Math.random().toString(36).substring(2, 18);
 
     // SALVAR FIRESTORE
-    await db.collection('chaves').doc(orderId).set({
+    await db.collection('chaves').doc(chave).set({
 
       nome: data.Customer?.full_name || '',
       email: data.Customer?.email || '',
       produto: data.Product?.name || '',
-      status: data.order_status || '',
+      status: 'ativo', || '',
       criadoEm: new Date()
 
     });
