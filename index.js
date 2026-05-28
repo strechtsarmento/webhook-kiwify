@@ -1,7 +1,9 @@
 const express = require('express');
 const admin = require('firebase-admin');
+const { Resend } = require('resend');
 
 const app = express();
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.use(express.json());
 
@@ -74,6 +76,29 @@ app.post('/webhook', async (req, res) => {
       criadoEm: new Date()
 
     });
+
+await resend.emails.send({
+
+  from: 'onboarding@resend.dev',
+
+  to: data.Customer?.email,
+
+  subject: 'Sua chave de acesso',
+
+  html: `
+
+    <h1>Compra aprovada ✅</h1>
+
+    <p>Olá ${data.Customer?.full_name}</p>
+
+    <p>Sua chave de acesso:</p>
+
+    <h2>${chave}</h2>
+
+    <p>Status: ativo</p>
+
+  `
+});
 
     console.log('Dados salvos no Firestore');
 
