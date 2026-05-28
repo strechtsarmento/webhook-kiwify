@@ -22,9 +22,10 @@ app.post('/webhook', async (req, res) => {
 
     console.log('Webhook recebido');
 
-    const data = req.body;
+   const data = req.body;
 
-    console.log(data);
+console.log('Webhook recebido');
+console.log(JSON.stringify(data, null, 2));
 
     // ID DA COMPRA
     const orderId = data.order_id || Date.now().toString();
@@ -46,6 +47,7 @@ app.post('/webhook', async (req, res) => {
 
   } catch (error) {
 
+    console.error('ERRO FIREBASE:');
     console.error(error);
 
     res.status(500).send(error);
